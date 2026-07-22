@@ -536,10 +536,10 @@ export default function InvitePage() {
       </div>
 
       {/* Footer */}
-      <div style={{ width: "100%", background: "#333333", padding: "24px 0", textAlign: "center", position: "relative", zIndex: 1 }}>
-        <p style={{ color: "#fff", fontSize: "15px", margin: 0 }}>
+      <div style={{ width: "100%", background: "#b5b5b5", padding: "24px 0", textAlign: "center", position: "relative", zIndex: 1 }}>
+        <p style={{ color: "#333333", fontSize: "15px", margin: 0 }}>
           Made with love by{" "}
-          <a href="https://www.hunacreatives.com/contact" target="_blank" rel="noopener noreferrer" style={{ color: "#fff", textDecoration: "underline", fontWeight: 700 }}>
+          <a href="https://www.hunacreatives.com/contact" target="_blank" rel="noopener noreferrer" style={{ color: "#333333", textDecoration: "underline", fontWeight: 700 }}>
             The RSVP Studio
           </a>
         </p>
