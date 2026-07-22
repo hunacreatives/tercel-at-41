@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
   await Promise.all([
     resend.emails.send({
-      from: "Tercel's 41st <hello@thersvpstudio.com>",
+      from: "The RSVP Studio <hello@thersvpstudio.com>",
       to: "hello@thersvpstudio.com",
       subject: `🥂 New RSVP from ${name}`,
       html: `
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       `,
     }),
     resend.emails.send({
-      from: "Tercel's 41st <hello@thersvpstudio.com>",
+      from: "The RSVP Studio <hello@thersvpstudio.com>",
       to: email,
       subject: "🥂 You're on the list — Tercel's 41st Birthday!",
       html: `
