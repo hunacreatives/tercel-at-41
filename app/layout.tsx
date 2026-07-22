@@ -12,7 +12,6 @@ const ptSans = PT_Sans({
 export const metadata: Metadata = {
   title: "Tercel's 41st Birthday",
   description: "You're invited to celebrate Atty. Tercel Mercado-Gephart's 41st birthday!",
-  icons: { icon: "/forty-one.webp" },
   openGraph: {
     title: "You're Invited — Tercel's 41st Birthday!",
     description: "Join us as we celebrate Tercel turning 41! Monday, July 27 · 6:00 PM · The Pelican Event Hall, Kasambagan, Cebu City. RSVP at tercelat41.com",

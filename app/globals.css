@@ -1,24 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --charcoal: #4a4a4a;
-  --charcoal-dark: #333333;
-  --silver: #9a9a9a;
+  --charcoal: #626262;
+  --charcoal-dark: #626262;
+  --silver: #626262;
   --gold: #b9974a;
   --bg-top: #f4f4f4;
   --bg-bottom: #e8e8e8;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* Scoped to @layer base so Tailwind utility classes (px-*, py-*, m-*, etc.)
+   — which live in the utilities layer — can still override this reset.
+   An unlayered rule here would silently beat every utility class regardless
+   of specificity, per the CSS cascade-layers spec. */
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-html, body {
-  width: 100%;
-  margin: 0;
-  padding: 0;
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 body {
