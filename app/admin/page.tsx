@@ -8,6 +8,7 @@ type RSVP = {
   name: string;
   email: string;
   bringing: string | null;
+  guest_count: number | null;
   message: string | null;
   created_at: string;
 };
@@ -225,7 +226,10 @@ export default function AdminPage() {
                       {r.name}
                     </td>
                     <td className="px-5 py-3 text-gray-500 whitespace-nowrap">{r.email}</td>
-                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap">{r.bringing || "—"}</td>
+                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap">
+                      {r.bringing || "—"}
+                      {r.guest_count ? ` (${r.guest_count} total)` : ""}
+                    </td>
                     <td className="px-5 py-3 text-gray-500 italic max-w-[240px]">
                       {r.message ? (
                         <button

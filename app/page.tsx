@@ -25,7 +25,7 @@ const SPARKLES = [
 ];
 
 export default function InvitePage() {
-  const [form, setForm] = useState({ name: "", email: "", bringing: "Just me", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", bringing: "Just me", guestCount: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [showForm, setShowForm] = useState(false);
   const [settled, setSettled] = useState(false);
@@ -74,7 +74,7 @@ export default function InvitePage() {
       });
       if (!res.ok) throw new Error();
       setStatus("success");
-      setForm({ name: "", email: "", bringing: "Just me", message: "" });
+      setForm({ name: "", email: "", bringing: "Just me", guestCount: "", message: "" });
     } catch {
       setStatus("error");
     }
@@ -506,13 +506,31 @@ export default function InvitePage() {
                 </div>
                 <div>
                   <label style={{ fontSize: "13px", color: "var(--charcoal)", display: "block", marginBottom: "8px", fontWeight: 600 }}>Will you be bringing anyone?</label>
-                  <select value={form.bringing} onChange={(e) => setForm({ ...form, bringing: e.target.value })} style={selectStyle}>
+                  <select
+                    value={form.bringing}
+                    onChange={(e) => setForm({ ...form, bringing: e.target.value, guestCount: e.target.value === "Plus 3 or more" ? form.guestCount : "" })}
+                    style={selectStyle}
+                  >
                     <option>Just me</option>
                     <option>Plus 1 guest</option>
                     <option>Plus 2 guests</option>
                     <option>Plus 3 or more</option>
                   </select>
                 </div>
+                {form.bringing === "Plus 3 or more" && (
+                  <div>
+                    <label style={{ fontSize: "13px", color: "var(--charcoal)", display: "block", marginBottom: "8px", fontWeight: 600 }}>How many guests total (including you)?</label>
+                    <input
+                      required
+                      type="number"
+                      min={4}
+                      inputMode="numeric"
+                      value={form.guestCount}
+                      onChange={(e) => setForm({ ...form, guestCount: e.target.value })}
+                      style={inputStyle}
+                    />
+                  </div>
+                )}
                 <div>
                   <label style={{ fontSize: "13px", color: "var(--charcoal)", display: "block", marginBottom: "8px", fontWeight: 600 }}>A Thoughtful Message</label>
                   <textarea rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} style={{ ...inputStyle, borderRadius: "24px", resize: "none" }} />
@@ -536,10 +554,10 @@ export default function InvitePage() {
       </div>
 
       {/* Footer */}
-      <div style={{ width: "100%", background: "#b5b5b5", padding: "24px 0", textAlign: "center", position: "relative", zIndex: 1 }}>
-        <p style={{ color: "#333333", fontSize: "15px", margin: 0 }}>
+      <div style={{ width: "100%", background: "#b4b4b4", padding: "24px 0", textAlign: "center", position: "relative", zIndex: 1 }}>
+        <p style={{ color: "#fff", fontSize: "15px", margin: 0 }}>
           Made with love by{" "}
-          <a href="https://www.hunacreatives.com/contact" target="_blank" rel="noopener noreferrer" style={{ color: "#333333", textDecoration: "underline", fontWeight: 700 }}>
+          <a href="https://www.hunacreatives.com/contact" target="_blank" rel="noopener noreferrer" style={{ color: "#fff", textDecoration: "underline", fontWeight: 700 }}>
             The RSVP Studio
           </a>
         </p>

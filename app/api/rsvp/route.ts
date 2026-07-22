@@ -10,16 +10,20 @@ const supabase = createClient(
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
 export async function POST(req: Request) {
-  const { name, email, bringing, message } = await req.json();
+  const { name, email, bringing, guestCount, message } = await req.json();
 
   if (!name || !email) {
     return NextResponse.json({ error: "Name and email required" }, { status: 400 });
   }
 
+  const parsedGuestCount =
+    bringing === "Plus 3 or more" && guestCount ? parseInt(guestCount, 10) : null;
+
   const { error: dbError } = await supabase.from("tercel_rsvps").insert({
     name,
     email,
     bringing: bringing || null,
+    guest_count: parsedGuestCount,
     message: message || null,
   });
 
@@ -48,7 +52,7 @@ export async function POST(req: Request) {
           <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
             <tr><td style="padding: 8px 0; color: #666; width: 140px;">Name</td><td style="padding: 8px 0; font-weight: 600;">${name}</td></tr>
             <tr><td style="padding: 8px 0; color: #666;">Email</td><td style="padding: 8px 0;">${email}</td></tr>
-            <tr><td style="padding: 8px 0; color: #666;">Bringing</td><td style="padding: 8px 0;">${bringing || "—"}</td></tr>
+            <tr><td style="padding: 8px 0; color: #666;">Bringing</td><td style="padding: 8px 0;">${bringing || "—"}${parsedGuestCount ? ` (${parsedGuestCount} total)` : ""}</td></tr>
             ${message ? `<tr><td style="padding: 8px 0; color: #666; vertical-align: top;">Message</td><td style="padding: 8px 0; font-style: italic;">"${message}"</td></tr>` : ""}
           </table>
           <p style="margin-top: 24px; color: #b9974a; font-size: 12px;">Sent from tercelat41.com</p>
@@ -73,7 +77,7 @@ export async function POST(req: Request) {
               <tr><td style="padding: 6px 0; color: #8a8478;">Time</td><td style="padding: 6px 0; font-weight: 600;">6:00 PM</td></tr>
               <tr><td style="padding: 6px 0; color: #8a8478;">Venue</td><td style="padding: 6px 0; font-weight: 600;">The Pelican Event Hall, Kasambagan, Cebu City</td></tr>
               <tr><td style="padding: 6px 0; color: #8a8478; vertical-align: top;">Dress Code</td><td style="padding: 6px 0; font-weight: 600;">Pastel attire — soft, elegant hues 💐</td></tr>
-              ${bringing ? `<tr><td style="padding: 6px 0; color: #8a8478;">Bringing</td><td style="padding: 6px 0; font-weight: 600;">${bringing}</td></tr>` : ""}
+              ${bringing ? `<tr><td style="padding: 6px 0; color: #8a8478;">Bringing</td><td style="padding: 6px 0; font-weight: 600;">${bringing}${parsedGuestCount ? ` (${parsedGuestCount} total)` : ""}</td></tr>` : ""}
             </table>
           </div>
 

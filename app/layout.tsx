@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     url: "https://tercelat41.com",
     siteName: "Tercel's 41st Birthday",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Atty. Tercel Mercado-Gephart's 41st Birthday" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Atty. Tercel Mercado-Gephart's 41st Birthday", type: "image/png" }],
   },
   twitter: {
     card: "summary_large_image",
