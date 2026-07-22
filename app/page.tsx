@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 const DRESS_COLORS = [
   { name: "Blush Pink", hex: "#f4c9c9" },
@@ -28,6 +28,33 @@ export default function InvitePage() {
   const [form, setForm] = useState({ name: "", email: "", bringing: "Just me", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [showForm, setShowForm] = useState(false);
+  const [settled, setSettled] = useState(false);
+  const introGroupRef = useRef<HTMLDivElement>(null);
+
+  // Intro: measure where the eyebrow+numeral group naturally sits, place it
+  // dead center in the viewport via an inverted transform, hold briefly,
+  // then release the transform so it animates into its real position
+  // (classic FLIP technique — no separate intro page/route needed).
+  useLayoutEffect(() => {
+    const el = introGroupRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const elCenterX = rect.left + rect.width / 2;
+    const elCenterY = rect.top + rect.height / 2;
+    const dx = window.innerWidth / 2 - elCenterX;
+    const dy = window.innerHeight / 2 - elCenterY;
+
+    el.style.transition = "none";
+    el.style.transform = `translate(${dx}px, ${dy}px) scale(1.06)`;
+
+    const settleTimer = setTimeout(() => {
+      el.style.transition = "transform 1.1s cubic-bezier(.22,1,.36,1)";
+      el.style.transform = "translate(0px, 0px) scale(1)";
+      setSettled(true);
+    }, 1300);
+
+    return () => clearTimeout(settleTimer);
+  }, []);
 
   const revealForm = () => {
     setShowForm(true);
@@ -277,39 +304,45 @@ export default function InvitePage() {
       ))}
 
       <div style={{ width: "min(680px, 92vw)", textAlign: "center", padding: "72px 0 32px", position: "relative", zIndex: 1 }}>
-        {/* Eyebrow */}
-        <p
-          className="uppercase tracking-[0.22em]"
-          style={{ fontSize: "clamp(13px, 3vw, 16px)", fontWeight: 700, color: "var(--charcoal)", animation: "fade-up 0.7s ease 0.05s both" }}
-        >
-          The Bea Alonzo of Cebu is turning
-        </p>
+        {/* Intro group: centered on mount, then settles into place via FLIP (see useLayoutEffect) */}
+        <div ref={introGroupRef} style={{ position: "relative", zIndex: 2, animation: "fade-in 0.5s ease both", willChange: "transform" }}>
+          {/* Eyebrow */}
+          <p
+            className="uppercase tracking-[0.22em]"
+            style={{ fontSize: "clamp(13px, 3vw, 16px)", fontWeight: 700, color: "var(--charcoal)" }}
+          >
+            The Bea Alonzo of Cebu is turning
+          </p>
 
-        {/* Big glitter 41 */}
-        <div
-          className="forty-one-wrap"
-          style={{ width: "min(68vw, 340px)", margin: "16px auto 0", position: "relative", animation: "fade-up 0.7s ease 0.15s both, numeral-breathe 5s ease-in-out 1s infinite" }}
-        >
-          <div className="numeral-glow" />
-          <Image src="/forty-one.webp" alt="Forty One" width={900} height={900} className="w-full h-auto relative" style={{ zIndex: 1 }} priority />
-          <div className="numeral-shine" />
-          {[
-            { top: "6%", left: "12%", size: 14, delay: "0s", dur: "3.2s" },
-            { top: "18%", left: "78%", size: 11, delay: "0.7s", dur: "2.8s" },
-            { top: "48%", left: "4%", size: 12, delay: "1.4s", dur: "3.6s" },
-            { top: "60%", left: "88%", size: 10, delay: "2.1s", dur: "3s" },
-            { top: "82%", left: "20%", size: 13, delay: "0.4s", dur: "3.4s" },
-            { top: "90%", left: "70%", size: 11, delay: "1.8s", dur: "2.9s" },
-          ].map((s, i) => (
-            <span
-              key={i}
-              className="numeral-sparkle"
-              style={{ top: s.top, left: s.left, fontSize: s.size, animationDelay: s.delay, animationDuration: s.dur }}
-            >
-              ✦
-            </span>
-          ))}
+          {/* Big glitter 41 */}
+          <div
+            className="forty-one-wrap"
+            style={{ width: "min(68vw, 340px)", margin: "16px auto 0", position: "relative", animation: "numeral-breathe 5s ease-in-out 1.3s infinite" }}
+          >
+            <div className="numeral-glow" />
+            <Image src="/forty-one.webp" alt="Forty One" width={900} height={900} className="w-full h-auto relative" style={{ zIndex: 1 }} priority />
+            <div className="numeral-shine" />
+            {[
+              { top: "6%", left: "12%", size: 14, delay: "0s", dur: "3.2s" },
+              { top: "18%", left: "78%", size: 11, delay: "0.7s", dur: "2.8s" },
+              { top: "48%", left: "4%", size: 12, delay: "1.4s", dur: "3.6s" },
+              { top: "60%", left: "88%", size: 10, delay: "2.1s", dur: "3s" },
+              { top: "82%", left: "20%", size: 13, delay: "0.4s", dur: "3.4s" },
+              { top: "90%", left: "70%", size: 11, delay: "1.8s", dur: "2.9s" },
+            ].map((s, i) => (
+              <span
+                key={i}
+                className="numeral-sparkle"
+                style={{ top: s.top, left: s.left, fontSize: s.size, animationDelay: s.delay, animationDuration: s.dur }}
+              >
+                ✦
+              </span>
+            ))}
+          </div>
         </div>
+
+        {/* Rest of the content — fades/slides in once the intro group settles */}
+        <div style={{ opacity: settled ? 1 : 0, transform: settled ? "translateY(0)" : "translateY(18px)", transition: "opacity 0.7s ease, transform 0.7s ease" }}>
 
         {/* Photos */}
         <div className="photos-row" style={{ display: "flex", justifyContent: "center", gap: "2px", marginTop: "32px", animation: "fade-up 0.7s ease 0.25s both" }}>
@@ -498,6 +531,8 @@ export default function InvitePage() {
           )}
         </div>
         )}
+
+        </div>
       </div>
 
       {/* Footer */}
