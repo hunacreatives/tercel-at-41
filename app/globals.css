@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+:root {
+  --charcoal: #4a4a4a;
+  --charcoal-dark: #333333;
+  --silver: #9a9a9a;
+  --gold: #b9974a;
+  --bg-top: #f4f4f4;
+  --bg-bottom: #e8e8e8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans), "PT Sans", sans-serif;
+  color: var(--charcoal);
+}
+
+/* TeX Gyre Termes isn't distributed on Google Fonts — it's a metric clone of
+   Times New Roman, so we fall back to the actual Times family for a visually
+   equivalent header face without shipping an unlicensed font file. */
+.font-header {
+  font-family: "TeX Gyre Termes", "Nimbus Roman No9 L", "Times New Roman", Times, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
