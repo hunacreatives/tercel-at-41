@@ -19,13 +19,13 @@ export const metadata: Metadata = {
     url: "https://tercelat41.com",
     siteName: "Tercel's 41st Birthday",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Atty. Tercel Mercado-Gephart's 41st Birthday", type: "image/png" }],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Atty. Tercel Mercado-Gephart's 41st Birthday", type: "image/jpeg" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "You're Invited — Tercel's 41st Birthday!",
     description: "Join us as we celebrate Tercel turning 41! Monday, July 27 · 6:00 PM",
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
   },
 };
 
