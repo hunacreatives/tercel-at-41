@@ -36,12 +36,11 @@ export default function AdminPage() {
 
   // Validate by asking the server (which checks the password and uses the
   // service-role key). No data is reachable without the correct password.
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const fetchRsvps = async (pw: string) => {
     setLoading(true);
     setError(false);
     const res = await fetch("/api/admin/rsvps", {
-      headers: { "x-admin-password": password },
+      headers: { "x-admin-password": pw },
     });
     if (res.ok) {
       const { rsvps } = await res.json();
@@ -51,6 +50,11 @@ export default function AdminPage() {
       setError(true);
     }
     setLoading(false);
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await fetchRsvps(password);
   };
 
   const deleteRsvp = async (id: string) => {
@@ -131,7 +135,7 @@ export default function AdminPage() {
             <p className="text-gray-400 text-sm mt-1">Tercel&apos;s 41st Birthday</p>
           </div>
           <button
-            onClick={() => location.reload()}
+            onClick={() => fetchRsvps(password)}
             className="text-sm text-gray-600 bg-white border border-gray-200 rounded-lg px-4 py-2 hover:bg-gray-50 cursor-pointer transition-colors"
           >
             Refresh
