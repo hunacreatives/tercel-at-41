@@ -25,9 +25,6 @@ const SPARKLES = [
 ];
 
 export default function InvitePage() {
-  const [form, setForm] = useState({ name: "", email: "", bringing: "Just me", guestCount: "", message: "" });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [showForm, setShowForm] = useState(false);
   const [settled, setSettled] = useState(false);
   const introGroupRef = useRef<HTMLDivElement>(null);
 
@@ -55,53 +52,6 @@ export default function InvitePage() {
 
     return () => clearTimeout(settleTimer);
   }, []);
-
-  const revealForm = () => {
-    setShowForm(true);
-    setTimeout(() => {
-      document.getElementById("rsvp-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 50);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("loading");
-    try {
-      const res = await fetch("/api/rsvp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      if (!res.ok) throw new Error();
-      setStatus("success");
-      setForm({ name: "", email: "", bringing: "Just me", guestCount: "", message: "" });
-    } catch {
-      setStatus("error");
-    }
-  };
-
-  const inputStyle: React.CSSProperties = {
-    width: "100%",
-    background: "#fff",
-    borderRadius: "999px",
-    padding: "14px 20px",
-    fontSize: "15px",
-    color: "var(--charcoal-dark)",
-    outline: "none",
-    border: "1.5px solid #c9c3b3",
-  };
-
-  const selectStyle: React.CSSProperties = {
-    ...inputStyle,
-    appearance: "none",
-    WebkitAppearance: "none",
-    backgroundImage:
-      "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%238fa06a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 7.5l5 5 5-5'/></svg>\")",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "right 18px center",
-    backgroundSize: "16px",
-    paddingRight: "44px",
-  };
 
   return (
     <div
@@ -421,134 +371,46 @@ export default function InvitePage() {
           </div>
         </div>
 
-        {/* CTA */}
-        {!showForm && (
-          <button
-            onClick={revealForm}
-            style={{ marginTop: "56px", border: "1.5px solid #a39d8f", background: "#fdfdfc", color: "#626262", animation: "fade-up 0.7s ease 0.85s both" }}
-            className="cta-btn rounded-full px-12 py-5 text-base whitespace-nowrap cursor-pointer"
-          >
-            Click here to RSVP
-          </button>
-        )}
-
-        {/* RSVP card */}
-        {showForm && (
+        {/* Event closed / next-event promo */}
         <div
-          id="rsvp-form"
           style={{
-            marginTop: "64px",
+            marginTop: "56px",
             marginBottom: "72px",
             background: "#faf9f6",
             borderRadius: "36px",
             border: "1.5px solid #c9c3b3",
             padding: "48px 36px",
-            textAlign: "left",
+            textAlign: "center",
             boxShadow: "0 24px 60px rgba(0,0,0,0.10), 0 8px 24px rgba(0,0,0,0.06)",
-            animation: "fade-up 0.5s ease both",
+            animation: "fade-up 0.7s ease 0.85s both",
           }}
         >
-          {status === "success" ? (
-            <div style={{ textAlign: "center", padding: "24px 0" }}>
-              <p style={{ fontSize: "44px", marginBottom: "14px" }}>🥂</p>
-              <p className="font-header" style={{ fontWeight: 700, color: "var(--charcoal-dark)", fontSize: "30px", marginBottom: "10px" }}>
-                You&apos;re on the list!
-              </p>
-              <p style={{ color: "var(--silver)", fontSize: "16px", lineHeight: 1.7, marginBottom: "28px" }}>
-                Can&apos;t wait to celebrate with you.<br />See you there!
-              </p>
+          <p style={{ fontSize: "44px", marginBottom: "14px" }}>🥂</p>
+          <p className="font-header" style={{ fontWeight: 700, color: "var(--charcoal-dark)", fontSize: "30px", marginBottom: "10px" }}>
+            What a Celebration!
+          </p>
+          <p style={{ color: "var(--silver)", fontSize: "16px", lineHeight: 1.7, marginBottom: "28px" }}>
+            Tercel&apos;s 41st is officially in the books.<br />Thank you for celebrating with her.
+          </p>
 
-              <div style={{ borderTop: "1px solid #eee", paddingTop: "24px", textAlign: "left" }}>
-                <p className="uppercase" style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", color: "var(--charcoal)", marginBottom: "10px", textAlign: "center" }}>
-                  Getting There
-                </p>
-                <p style={{ fontSize: "14px", color: "var(--silver)", textAlign: "center", marginBottom: "16px", lineHeight: 1.6 }}>
-                  The Pelican Event Hall<br />Kasambagan, Cebu City
-                </p>
-                <a
-                  href="https://maps.google.com/?q=The+Pelican+Event+Hall+Kasambagan+Cebu+City"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: "block", borderRadius: "16px", overflow: "hidden", border: "1px solid #e5e0d5", textDecoration: "none" }}
-                >
-                  <iframe
-                    src="https://maps.google.com/maps?q=The+Pelican+Event+Hall+Kasambagan+Cebu+City&output=embed&z=16"
-                    width="100%"
-                    height="180"
-                    style={{ display: "block", border: "none", pointerEvents: "none" }}
-                    loading="lazy"
-                  />
-                  <div style={{ background: "#faf9f6", padding: "10px 14px", display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ fontSize: "13px" }}>📍</span>
-                    <p style={{ fontSize: "12px", color: "#8fa06a", fontWeight: 600, margin: 0, letterSpacing: "0.05em" }}>
-                      Open in Google Maps ›
-                    </p>
-                  </div>
-                </a>
-              </div>
-            </div>
-          ) : (
-            <>
-              <h3 className="font-header text-center" style={{ fontWeight: 700, color: "var(--charcoal-dark)", fontSize: "30px", marginBottom: "8px" }}>
-                Will You Join Us?
-              </h3>
-              <p className="text-center" style={{ color: "var(--silver)", fontSize: "16px", marginBottom: "30px" }}>
-                I would love to Celebrate with you!
-              </p>
-              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                <div>
-                  <label style={{ fontSize: "13px", color: "var(--charcoal)", display: "block", marginBottom: "8px", fontWeight: 600 }}>Your Name</label>
-                  <input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} style={inputStyle} />
-                </div>
-                <div>
-                  <label style={{ fontSize: "13px", color: "var(--charcoal)", display: "block", marginBottom: "8px", fontWeight: 600 }}>Email Address</label>
-                  <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} style={inputStyle} />
-                </div>
-                <div>
-                  <label style={{ fontSize: "13px", color: "var(--charcoal)", display: "block", marginBottom: "8px", fontWeight: 600 }}>Will you be bringing anyone?</label>
-                  <select
-                    value={form.bringing}
-                    onChange={(e) => setForm({ ...form, bringing: e.target.value, guestCount: e.target.value === "Plus 3 or more" ? form.guestCount : "" })}
-                    style={selectStyle}
-                  >
-                    <option>Just me</option>
-                    <option>Plus 1 guest</option>
-                    <option>Plus 2 guests</option>
-                    <option>Plus 3 or more</option>
-                  </select>
-                </div>
-                {form.bringing === "Plus 3 or more" && (
-                  <div>
-                    <label style={{ fontSize: "13px", color: "var(--charcoal)", display: "block", marginBottom: "8px", fontWeight: 600 }}>How many guests total (including you)?</label>
-                    <input
-                      required
-                      type="number"
-                      min={4}
-                      inputMode="numeric"
-                      value={form.guestCount}
-                      onChange={(e) => setForm({ ...form, guestCount: e.target.value })}
-                      style={inputStyle}
-                    />
-                  </div>
-                )}
-                <div>
-                  <label style={{ fontSize: "13px", color: "var(--charcoal)", display: "block", marginBottom: "8px", fontWeight: 600 }}>A Thoughtful Message</label>
-                  <textarea rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} style={{ ...inputStyle, borderRadius: "24px", resize: "none" }} />
-                </div>
-                {status === "error" && <p style={{ color: "#ef4444", fontSize: "13px" }}>Something went wrong, please try again.</p>}
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="rsvp-btn"
-                  style={{ width: "100%", color: "#fff", borderRadius: "999px", padding: "16px", fontSize: "15px", fontWeight: 500, cursor: "pointer", opacity: status === "loading" ? 0.6 : 1, border: "none", marginTop: "6px" }}
-                >
-                  {status === "loading" ? "Sending..." : "Confirm Attendance"}
-                </button>
-              </form>
-            </>
-          )}
+          <div style={{ borderTop: "1px solid #eee", paddingTop: "24px" }}>
+            <p className="uppercase" style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.1em", color: "var(--charcoal)", marginBottom: "10px" }}>
+              Planning Your Own Event?
+            </p>
+            <p style={{ fontSize: "14px", color: "var(--silver)", marginBottom: "24px", lineHeight: 1.6 }}>
+              Sites like this one are built by The RSVP Studio.<br />Let&apos;s bring your next celebration to life.
+            </p>
+            <a
+              href="https://www.hunacreatives.com/contact"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rsvp-btn"
+              style={{ display: "inline-block", color: "#fff", borderRadius: "999px", padding: "16px 40px", fontSize: "15px", fontWeight: 500, textDecoration: "none" }}
+            >
+              The RSVP Studio ›
+            </a>
+          </div>
         </div>
-        )}
 
         </div>
       </div>
